@@ -25,7 +25,7 @@ Mas fórum sem gente é cemitério. Fórum é das poucas coisas que não dá pra
 fazer sozinho: dez posts meus num fórum meu não é comunidade, é diário com
 paginação. Saudade não constrói fórum.
 
-## Então o blog!faz 
+## Então o blog! FIZ
 
 O [Dunossauro](https://dunossauro.com) falou que eu deveria criar a porra de um
 blog. E ele me apresentou pela 142º vez o [Crie a Porra de Um Blog](https://crieaporradeum.blog/) dizendo exatamente isso

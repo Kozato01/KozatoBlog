@@ -707,9 +707,9 @@ function maquinaDeEscrever() {
 
 const ANEL = [
     { url: "https://dunossauro.com", nome: "🦖 Dunossauro",
-      oque: "Python, lives de código e material aberto em PT-BR" },
+      oque: "A MAIOR PESSOA QUE EU CONHEÇO QUE CONHECE TUDO DE PYTHON" },
     { url: "https://teomewhy.org", nome: "📊 Téo Me Why",
-      oque: "Ciência de dados, ensino aberto e comunidade" },
+      oque: "SIMPLISMENTE O MAGO DOS DADOS!" },
 ];
 
 const SELOS = ["🐍 python", "☁️ gcp", "🔷 azure", "🤖 rag", "💬 dialogflow",
@@ -778,33 +778,37 @@ function telaSobre() {
             <div class="prosa">
                 <img class="retrato" src="/assets/images/avatar.avif" alt="Wylliams Diogo"
                      width="112" height="112" loading="lazy">
-                <p>Sou Wylliams Diogo — o Kozato, desde a época em que a gente
-                   escolhia nick e ficava com ele pra sempre. Engenheiro de dados
-                   e IA. Cinco anos entre consultoria e cliente direto, a maior
-                   parte deles traduzindo “quero um robô que responda tudo” para
-                   uma arquitetura que aguenta produção.</p>
-                <p>O dia a dia é Google Cloud — Vertex AI, BigQuery, Dialogflow CX —
-                   e arquiteturas de RAG. Já coloquei agente conversacional de pé
-                   para hospital, cartório, concessionária de rodovia e banco
-                   digital. Antes disso, uma temporada em Azure montando pipelines
-                   que processam centenas de milhares de registros por dia.</p>
-                <p>Gosto mesmo é da parte chata: descobrir por que o agente responde
-                   errado, achar o documento que está poluindo o índice, entender
-                   por que o pipeline quebra às 3h porque alguém mudou o schema sem
-                   avisar. É o que separa uma demo bonita de um sistema que funciona.</p>
-                <p>Fora do trabalho: nostálgico assumido da internet dos anos 2000.
-                   Turbo Pascal na aula de informática, skin de Winamp, mIRC, LAN
-                   house até fechar e Counter-Strike 1.6. Hoje é Final Fantasy XIV
-                   comendo o tempo que sobra, e uma vontade recorrente de mestrar
-                   uma campanha de D&amp;D do começo ao fim — o que nunca acontece,
-                   porque sempre falta gente, agenda, ou os dois.</p>
-                <p>Este site é um monolito HTML servido por Flask. Sem bundler, sem
-                   build step, sem framework de UI. Os posts são arquivos markdown
-                   que entram por commit. Ele existe desde 2019 e já foi bem mais
-                   piscante — tinha rastro de estrela no cursor e tudo. Cansei do
-                   brilho; ficou só o texto. O código está todo em
+                <p>Sou Wylliams Diogo, o Kozato. Nick escolhido na época em que a
+                   gente escolhia um e ficava com ele pra sempre. Engenheiro de
+                   dados e IA, cinco anos entre consultoria e cliente direto —
+                   boa parte deles ouvindo “quero um robô que responda tudo” e
+                   descobrindo só depois o que a pessoa queria dizer com isso.</p>
+                <p>Trabalho com Google Cloud: Vertex AI, BigQuery, Dialogflow CX,
+                   RAG. Já botei agente conversacional de pé pra hospital,
+                   cartório, concessionária de rodovia e banco digital. Antes
+                   disso teve uma temporada de Azure montando pipeline que roda
+                   centenas de milhares de registros por dia. Menos glamouroso
+                   do que soa.</p>
+                <p>A parte que eu gosto é a chata. Achar por que o agente
+                   respondeu errado, caçar o documento que sujou o índice,
+                   entender por que o pipeline quebrou às 3 da manhã. Quase
+                   sempre alguém mexeu no schema e não avisou ninguém.</p>
+                <p>Fora do trabalho eu sou nostálgico da internet dos anos 2000 e
+                   nem tento disfarçar. Turbo Pascal na aula de informática, skin
+                   de Winamp, mIRC, LAN house até fechar, CS 1.6. Hoje é Final
+                   Fantasy XIV comendo o tempo que sobra. Faz uns anos que eu
+                   quero mestrar uma campanha de D&amp;D do começo ao fim, mas
+                   sempre falta gente ou falta agenda, então não.</p>
+                <p>Isso aqui é um blog. Fiz pra jogar besteira dentro: texto,
+                   delírio, projeto que eu tô montando, coisa que eu achei legal
+                   e queria mostrar pra alguém. É um HTML só, servido por Flask,
+                   e os posts são markdown que entram por commit — não tem build,
+                   não tem framework, e eu não pretendo colocar. Existe desde 2019
+                   e já foi bem mais piscante, tinha até rastro de estrela no
+                   cursor. Tirei. Até 2030 eu explodo tudo isso e faço outro,
+                   provavelmente pior. Código todo no
                    <a href="https://github.com/Kozato01/KozatoBlog">KozatoBlog</a>,
-                   inclusive os posts.</p>
+                   os posts inclusive.</p>
                 <p><a href="https://github.com/Kozato01">github</a> ·
                    <a href="https://www.twitch.tv/kozat0">twitch</a> ·
                    <a href="mailto:wylliamsdiogo6@gmail.com">e-mail</a></p>
@@ -831,13 +835,7 @@ const PROJETOS = [
         periodo: "2023—",
         texto: "Recuperação sobre bases de 1K a 10K documentos em domínios que não se parecem em nada: jurídico quebra bem por artigo, manual quebra por seção, e histórico de atendimento não quebra bem de jeito nenhum. Boa parte do trabalho é descobrir isso antes do cliente.",
         stack: "langchain · vertex ai search · bigquery",
-    },
-    {
-        nome: "Kozato World",
-        periodo: "2019—",
-        texto: "Este site. Nasceu como homenagem à internet dos anos 2000, sobreviveu a umas quatro reformas e virou blog. Continua sendo um arquivo HTML servido por Flask, sem bundler e sem framework, porque em algum momento isso deixou de ser preguiça e virou opinião.",
-        stack: "flask · markdown · html",
-    },
+    }
 ];
 
 function telaProjetos() {
