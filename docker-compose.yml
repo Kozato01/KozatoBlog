@@ -1,0 +1,40 @@
+services:
+  web:
+    build: .
+    image: kozato-world:latest
+    container_name: kozato-world
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # o túnel do Cloudflare aponta para http://localhost:8080 (network_mode:
+      # host no cloudflared não resolve mais o nome de serviço "web")
+      - PORT=3000
+    volumes:
+      # conteúdo e assets servidos direto do host: publicar um post = scp (sem
+      # rebuild), e o app relê o arquivo a cada acesso
+      - ./content:/app/content
+      - ./templates:/app/templates
+      - ./assets:/app/assets
+    ports:
+      # acesso local: http://192.168.0.50:8080
+      - "8080:3000"
+      # a 3333 era do privacy-server.js, que não existe mais. Continua publicada
+      # para o cloudflared seguir apontando privacidade.kozato.app.br para
+      # localhost:3333 sem precisar mexer no config.yml do servidor — cai neste
+      # mesmo container, que redireciona esse domínio para /privacidade.
+      - "3333:3000"
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: kozato-tunnel
+    restart: unless-stopped
+    # host: precisa enxergar localhost:PORTA do host de verdade, não da rede
+    # isolada deste compose — é assim que ele alcança as portas publicadas
+    # por outros projetos (rifa:8030, api:8000, web-trainer:5174 etc.)
+    network_mode: host
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      # só conecta o túnel depois que o site responder ao healthcheck
+      web:
+        condition: service_healthy

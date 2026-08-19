@@ -1,0 +1,17 @@
+.git
+.gitignore
+.gitattributes
+.claude
+.env
+.env.*
+data
+__pycache__
+.venv
+test_*.py
+*.pdf
+*.md
+# as páginas públicas e os posts SÃO markdown — precisam entrar na imagem
+!content/*.md
+!content/posts/*.md
+Dockerfile
+docker-compose.yml

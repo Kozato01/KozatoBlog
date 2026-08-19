@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wylliams Diogo — dados, IA e código</title>
+<meta name="description" content="Blog pessoal de Wylliams Diogo. Engenharia de dados, IA, Python e projetos que dão errado antes de dar certo.">
+<link rel="alternate" type="application/rss+xml" title="Wylliams Diogo" href="/feed.xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+    --paper:   #FBFAF8;
+    --ink:     #16161A;
+    --muted:   #6E6E78;
+    --rule:    #E4E2DD;
+    --accent:  #4A3CA8;
+    --wash:    #F2F0EC;
+
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --mono:  "JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace;
+
+    --rail: 8.5rem;
+    --measure: 34rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --paper:  #111114;
+        --ink:    #E8E6E1;
+        --muted:  #8C8C96;
+        --rule:   #2A2A31;
+        --accent: #A99BF5;
+        --wash:   #1A1A20;
+    }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.shell {
+    max-width: 52rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* ---- topo ---- */
+
+.topbar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 2rem 0 3.5rem;
+    font-family: var(--mono);
+    font-size: 0.8125rem;
+}
+
+.mark {
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+}
+
+.mark::before {
+    content: "~/";
+    color: var(--muted);
+}
+
+.topnav {
+    display: flex;
+    gap: 1.25rem;
+}
+
+.topnav a {
+    color: var(--muted);
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+}
+
+.topnav a:hover { color: var(--ink); }
+
+.topnav a[aria-current="page"] {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+}
+
+/* ---- cabeçalho da home ---- */
+
+.intro {
+    padding-bottom: 3rem;
+    border-bottom: 1px solid var(--rule);
+}
+
+.intro h1 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(2.25rem, 6vw, 3.25rem);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+}
+
+.intro p {
+    margin: 0;
+    max-width: var(--measure);
+    color: var(--muted);
+    font-size: 1.125rem;
+}
+
+/* a frase da máquina de escrever troca de tamanho e quebra a linha; a altura
+   reservada segura o filtro e a lista no lugar em vez de fazer a página pular */
+.intro .escreve {
+    margin-top: 0.5rem;
+    min-height: 3.4em;
+}
+
+/* ---- filtro ---- */
+
+.filtro {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+}
+
+.chip {
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    cursor: pointer;
+}
+
+.chip:hover {
+    color: var(--ink);
+    border-color: var(--muted);
+}
+
+.chip[aria-pressed="true"] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+}
+
+/* ---- lista de posts ---- */
+
+.lista { padding: 0 0 2rem; }
+
+.item {
+    display: grid;
+    grid-template-columns: var(--rail) 1fr;
+    gap: 0 2rem;
+    padding: 2.25rem 0;
+    border-bottom: 1px solid var(--rule);
+}
+
+/* o trilho: data e categoria alinhadas em coluna, como saída de query */
+.trilho {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--muted);
+    padding-top: 0.45rem;
+}
+
+.trilho .cat {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--accent);
+}
+
+.item h2 {
+    margin: 0 0 0.4rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+}
+
+.item h2 a {
+    text-decoration: none;
+    background-image: linear-gradient(var(--accent), var(--accent));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0 1px;
+    transition: background-size 0.25s ease;
+}
+
+.item h2 a:hover { background-size: 100% 1px; }
+
+.resumo {
+    margin: 0;
+    max-width: var(--measure);
+    color: var(--muted);
+}
+
+.tags {
+    margin-top: 0.75rem;
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--muted);
+}
+
+.vazio {
+    padding: 3rem 0;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.8125rem;
+}
+
+/* ---- post aberto ---- */
+
+.voltar {
+    display: inline-block;
+    margin-bottom: 2rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+}
+
+.voltar:hover { color: var(--ink); }
+
+.post header {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 2.5rem;
+}
+
+.post h1 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+}
+
+.post .meta {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.post .meta .cat { color: var(--accent); }
+
+.prosa { max-width: var(--measure); }
+
+.prosa > * + * { margin-top: 1.4em; }
+
+.prosa h2 {
+    margin-top: 2.5em;
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.prosa h3 {
+    margin-top: 2em;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.prosa a { color: var(--accent); }
+
+.prosa ul, .prosa ol { padding-left: 1.25rem; }
+.prosa li + li { margin-top: 0.4em; }
+
+.prosa code {
+    padding: 0.15em 0.4em;
+    background: var(--wash);
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 0.85em;
+}
+
+.prosa pre {
+    padding: 1rem 1.25rem;
+    background: var(--wash);
+    border-radius: 3px;
+    overflow-x: auto;
+}
+
+.prosa pre code {
+    padding: 0;
+    background: none;
+    font-size: 0.8125rem;
+}
+
+.prosa blockquote {
+    margin-left: 0;
+    padding-left: 1.25rem;
+    border-left: 2px solid var(--accent);
+    color: var(--muted);
+    font-style: italic;
+}
+
+.prosa img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 3px;
+}
+
+/* ---- páginas simples ---- */
+
+.pagina h1 {
+    margin: 0 0 2rem;
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+}
+
+.pagina .prosa p + p { margin-top: 1.4em; }
+
+/* o retrato flutua no primeiro parágrafo do /sobre; o shape-outside deixa o
+   texto acompanhar a curva em vez de contornar a caixa quadrada */
+/* .prosa .retrato, e não .retrato: o `.prosa img` acima é mais específico e
+   devolveria height:auto e o border-radius de 3px, desarredondando o retrato */
+.prosa .retrato {
+    float: left;
+    width: 7rem;
+    height: 7rem;
+    margin: 0.35rem 1.25rem 0.75rem 0;
+    border-radius: 50%;
+    shape-outside: circle();
+    object-fit: cover;
+}
+
+/* o `* + *` da prosa empurraria o primeiro parágrafo pra baixo do retrato */
+.prosa .retrato + p { margin-top: 0; }
+
+@media (max-width: 40rem) {
+    .prosa .retrato {
+        float: none;
+        margin: 0 0 1.25rem;
+    }
+}
+
+.projeto {
+    display: grid;
+    grid-template-columns: var(--rail) 1fr;
+    gap: 0 2rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--rule);
+}
+
+.projeto h2 {
+    margin: 0 0 0.4rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.projeto p {
+    margin: 0;
+    max-width: var(--measure);
+    color: var(--muted);
+}
+
+.projeto .stack {
+    margin-top: 0.6rem;
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--muted);
+}
+
+.pagina .lede {
+    max-width: var(--measure);
+    margin: -1.25rem 0 2.5rem;
+    color: var(--muted);
+    font-size: 1.125rem;
+}
+
+/* ---- rodapé ---- */
+
+.rodape {
+    padding: 4rem 0 3rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.rodape a { color: var(--muted); }
+.rodape a:hover { color: var(--ink); }
+
+/* ---- quinquilharia: webring, badges, selos ---- */
+
+.tranqueira {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    padding: 3rem 0 0;
+    border-top: 1px solid var(--rule);
+}
+
+.caixa h2 {
+    margin: 0 0 0.9rem;
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+/* o webring é o único móvel de 2005 que sobrou: caixa fechada, barra de título
+   invertida, linhas zebradas de tabela. O resto da página segue sóbrio. */
+
+.anel {
+    border: 2px solid var(--ink);
+    background: var(--wash);
+    align-self: start;
+}
+
+.anel h2 {
+    margin: 0;
+    padding: 0.4rem 0.7rem;
+    background: var(--ink);
+    color: var(--paper);
+}
+
+.anel > a {
+    display: block;
+    padding: 0.55rem 0.7rem;
+    border-bottom: 1px dotted var(--rule);
+    font-family: var(--mono);
+    text-decoration: none;
+}
+
+.anel > a:nth-of-type(even) { background: var(--paper); }
+
+.anel > a:last-of-type { border-bottom: 0; }
+
+.anel > a:hover { background: var(--accent); color: var(--paper); }
+
+.anel > a:hover .oque { color: inherit; }
+
+.anel .nome {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 500;
+}
+
+.anel .nome::before { content: "▸ "; }
+
+.anel .oque {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.6875rem;
+    line-height: 1.5;
+    color: var(--muted);
+}
+
+.anel .setas {
+    margin: 0;
+    padding: 0.5rem;
+    border-top: 2px solid var(--ink);
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    text-align: center;
+    color: var(--muted);
+}
+
+.anel .setas a { color: var(--accent); }
+
+.selos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.selo {
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--muted);
+}
+
+.selo:hover { border-color: var(--accent); color: var(--ink); }
+
+/* ---- não-feito-por-IA ---- */
+
+.humano {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding: 1.25rem;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: var(--wash);
+}
+
+/* os dois selos têm a mesma proporção (3:2); a altura igual basta pra alinhar.
+   O display:block mata o vão de linha que a img inline deixa embaixo do svg */
+.humano > a { display: flex; }
+
+.humano img {
+    display: block;
+    height: 2.75rem;
+    width: auto;
+    flex-shrink: 0;
+}
+
+/* o selo do vibecode é preto no claro; no escuro ele some no fundo */
+@media (prefers-color-scheme: dark) {
+    .humano .xvibe { filter: invert(1) hue-rotate(180deg); }
+}
+
+.humano p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--muted);
+}
+
+.humano a { color: var(--accent); }
+
+/* ---- máquina de escrever da home ---- */
+
+.digitando {
+    color: var(--ink);
+    border-right: 1px solid var(--ink);
+    padding-right: 2px;
+    animation: pisca 1.1s step-end infinite;
+}
+
+@keyframes pisca {
+    50% { border-color: transparent; }
+}
+
+/* ---- mobile: o trilho sobe pra cima do título ---- */
+
+@media (max-width: 40rem) {
+    .item, .projeto {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+    }
+
+    .trilho {
+        padding-top: 0;
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .trilho .cat { margin-top: 0; }
+
+    .item h2 { font-size: 1.3125rem; }
+
+    .tranqueira { grid-template-columns: 1fr; gap: 2rem; }
+
+    .humano { flex-direction: column; align-items: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, .digitando { transition: none !important; animation: none !important; }
+    .digitando { border-right: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+    <header class="topbar">
+        <a class="mark" href="/" data-rota>wylliams</a>
+        <nav class="topnav">
+            <a href="/" data-rota>blog</a>
+            <a href="/projetos" data-rota>projetos</a>
+            <a href="/sobre" data-rota>sobre</a>
+        </nav>
+    </header>
+
+    <main id="palco"></main>
+
+    <footer class="rodape">
+        Wylliams Diogo · 2025—???? ·
+        <a href="https://github.com/Kozato01">github</a> ·
+        <a href="https://www.twitch.tv/kozat0">twitch</a> ·
+        <a href="mailto:wylliamsdiogo6@gmail.com">e-mail</a> ·
+        <a href="/feed.xml">rss</a>
+    </footer>
+</div>
+
+<script>
+const palco = document.getElementById("palco");
+
+let posts = [];
+let categorias = [];
+let categoriaAtiva = "todos";
+
+const esc = s => {
+    const d = document.createElement("div");
+    d.textContent = s == null ? "" : String(s);
+    return d.innerHTML;
+};
+
+// ---- telas ----
+
+function telaLista() {
+    const visiveis = categoriaAtiva === "todos"
+        ? posts
+        : posts.filter(p => p.category === categoriaAtiva);
+
+    const chips = ["todos", ...categorias].map(c => `
+        <button class="chip" data-cat="${esc(c)}"
+                aria-pressed="${c === categoriaAtiva}">${esc(c.toLowerCase())}</button>
+    `).join("");
+
+    const itens = visiveis.length ? visiveis.map(p => `
+        <article class="item">
+            <div class="trilho">
+                <time datetime="${esc(p.date)}">${esc(p.date_display || p.date)}</time>
+                <span class="cat">${esc(p.category.toLowerCase())}</span>
+            </div>
+            <div>
+                <h2><a href="/posts/${esc(p.slug)}" data-rota>${esc(p.title)}</a></h2>
+                <p class="resumo">${esc(p.preview)}</p>
+                ${p.tags && p.tags.length
+                    ? `<p class="tags">${p.tags.map(esc).join(" · ")}</p>`
+                    : ""}
+            </div>
+        </article>
+    `).join("") : `<p class="vazio">Nada em ${esc(categoriaAtiva)} ainda.</p>`;
+
+    return `
+        <section class="intro">
+            <h1>Opa! Sou o Kozato.</h1>
+            <p>Wylliams Diogo. Engenheiro de dados de dia, isto aqui de noite.</p>
+            <p class="escreve">Escrevo sobre
+               <span class="digitando" id="maquina"></span></p>
+        </section>
+        <div class="filtro">${chips}</div>
+        <div class="lista">${itens}</div>
+        ${tranqueira()}
+    `;
+}
+
+// as besteiras que a maquina de escrever cospe, em ordem
+const DELIRIOS = [
+    "pipeline que quebra às 3h da manhã.",
+    "agente de IA que responde qualquer coisa.",
+    "um servidor Debian que mora na minha sala.",
+    "SQL, que eu jurava que sabia.",
+    "saudade de LAN house.",
+    "Final Fantasy XIV comendo minha vida.",
+];
+
+let maquinaTimer = null;
+
+function maquinaDeEscrever() {
+    clearTimeout(maquinaTimer);
+    const alvo = document.getElementById("maquina");
+    if (!alvo) return;
+
+    // quem pediu menos movimento lê a primeira frase e pronto
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        alvo.textContent = DELIRIOS[0];
+        return;
+    }
+
+    let frase = 0, letra = 0, apagando = false;
+
+    (function passo() {
+        const texto = DELIRIOS[frase];
+        alvo.textContent = texto.slice(0, letra);
+
+        if (!apagando && letra === texto.length) {
+            apagando = true;
+            maquinaTimer = setTimeout(passo, 2200);
+            return;
+        }
+
+        if (apagando && letra === 0) {
+            apagando = false;
+            frase = (frase + 1) % DELIRIOS.length;
+        }
+
+        letra += apagando ? -1 : 1;
+        maquinaTimer = setTimeout(passo, apagando ? 25 : 45);
+    })();
+}
+
+// ---- quinquilharia do rodapé ----
+
+const ANEL = [
+    { url: "https://dunossauro.com", nome: "🦖 Dunossauro",
+      oque: "Python, lives de código e material aberto em PT-BR" },
+    { url: "https://teomewhy.org", nome: "📊 Téo Me Why",
+      oque: "Ciência de dados, ensino aberto e comunidade" },
+];
+
+const SELOS = ["🐍 python", "☁️ gcp", "🔷 azure", "🤖 rag", "💬 dialogflow",
+               "⚡ spark", "🐘 sql", "🎮 ffxiv", "📼 vhs", "🍕 pizza"];
+
+function tranqueira() {
+    return `
+        <div class="tranqueira">
+            <section class="caixa anel">
+                <h2>Webring</h2>
+                ${ANEL.map(s => `
+                    <a href="${s.url}" rel="noopener">
+                        <span class="nome">${esc(s.nome)}</span>
+                        <span class="oque">${esc(s.oque)}</span>
+                    </a>
+                `).join("")}
+                <p class="setas">
+                    ${ANEL.length} sites · <a href="#" id="sorte">me manda pra um deles »</a>
+                </p>
+            </section>
+
+            <section class="caixa">
+                <h2>Selos</h2>
+                <div class="selos">
+                    ${SELOS.map(s => `<span class="selo">${esc(s)}</span>`).join("")}
+                </div>
+            </section>
+        </div>
+
+        <div class="humano">
+            <a href="https://notbyai.fyi/" title="Not By AI">
+                <img src="/assets/images/notbyai.svg" alt="Selo Not By AI">
+            </a>
+            <img class="xvibe" src="/assets/images/xvibe.png" alt="Selo: não é alto em vibecode">
+            <p>Texto escrito por gente, com as próprias mãos e os próprios erros.
+               O código também (as vezes...) — e quando não for, eu aviso.
+               <a href="https://notbyai.fyi/">notbyai.fyi</a></p>
+        </div>
+    `;
+}
+
+function telaPost(slug) {
+    const p = posts.find(p => p.slug === slug);
+    if (!p) return `<p class="vazio">Post não encontrado. <a href="/" data-rota>Voltar</a></p>`;
+
+    return `
+        <a class="voltar" href="/" data-rota>← todos os posts</a>
+        <article class="post">
+            <header>
+                <h1>${esc(p.title)}</h1>
+                <p class="meta">
+                    <time datetime="${esc(p.date)}">${esc(p.date_display || p.date)}</time>
+                    · <span class="cat">${esc(p.category.toLowerCase())}</span>
+                    ${p.tags && p.tags.length ? " · " + p.tags.map(esc).join(" · ") : ""}
+                </p>
+            </header>
+            <div class="prosa">${p.content}</div>
+        </article>
+    `;
+}
+
+function telaSobre() {
+    return `
+        <section class="pagina">
+            <h1>Sobre</h1>
+            <div class="prosa">
+                <img class="retrato" src="/assets/images/avatar.avif" alt="Wylliams Diogo"
+                     width="112" height="112" loading="lazy">
+                <p>Sou Wylliams Diogo — o Kozato, desde a época em que a gente
+                   escolhia nick e ficava com ele pra sempre. Engenheiro de dados
+                   e IA. Cinco anos entre consultoria e cliente direto, a maior
+                   parte deles traduzindo “quero um robô que responda tudo” para
+                   uma arquitetura que aguenta produção.</p>
+                <p>O dia a dia é Google Cloud — Vertex AI, BigQuery, Dialogflow CX —
+                   e arquiteturas de RAG. Já coloquei agente conversacional de pé
+                   para hospital, cartório, concessionária de rodovia e banco
+                   digital. Antes disso, uma temporada em Azure montando pipelines
+                   que processam centenas de milhares de registros por dia.</p>
+                <p>Gosto mesmo é da parte chata: descobrir por que o agente responde
+                   errado, achar o documento que está poluindo o índice, entender
+                   por que o pipeline quebra às 3h porque alguém mudou o schema sem
+                   avisar. É o que separa uma demo bonita de um sistema que funciona.</p>
+                <p>Fora do trabalho: nostálgico assumido da internet dos anos 2000.
+                   Turbo Pascal na aula de informática, skin de Winamp, mIRC, LAN
+                   house até fechar e Counter-Strike 1.6. Hoje é Final Fantasy XIV
+                   comendo o tempo que sobra, e uma vontade recorrente de mestrar
+                   uma campanha de D&amp;D do começo ao fim — o que nunca acontece,
+                   porque sempre falta gente, agenda, ou os dois.</p>
+                <p>Este site é um monolito HTML servido por Flask. Sem bundler, sem
+                   build step, sem framework de UI. Os posts são arquivos markdown
+                   que entram por commit. Ele existe desde 2019 e já foi bem mais
+                   piscante — tinha rastro de estrela no cursor e tudo. Cansei do
+                   brilho; ficou só o texto. O código está todo em
+                   <a href="https://github.com/Kozato01/KozatoBlog">KozatoBlog</a>,
+                   inclusive os posts.</p>
+                <p><a href="https://github.com/Kozato01">github</a> ·
+                   <a href="https://www.twitch.tv/kozat0">twitch</a> ·
+                   <a href="mailto:wylliamsdiogo6@gmail.com">e-mail</a></p>
+            </div>
+        </section>
+    `;
+}
+
+const PROJETOS = [
+    {
+        nome: "Treino Up",
+        periodo: "2026",
+        texto: "App de controle de treino que sugere o próximo exercício por IA. Ionic no cliente, Python no servidor, Vertex AI no meio. A parte difícil não foi nenhuma das três: foi fazer o modelo entender que não dá pra mandar o sujeito no supino em dia de perna.",
+        stack: "ionic · python · vertex ai · postgres",
+    },
+    {
+        nome: "Servidor de casa",
+        periodo: "2026",
+        texto: "Debian, Docker e um túnel do Cloudflare numa máquina que mora na minha sala. Este site sai dali. Já caiu por queda de luz, por atualização de kernel e por uma vez em que eu puxei o cabo errado — e as três vezes foram mais divertidas que abrir chamado em provedor.",
+        stack: "debian · docker · nginx · cloudflare",
+    },
+    {
+        nome: "RAG multi-domínio",
+        periodo: "2023—",
+        texto: "Recuperação sobre bases de 1K a 10K documentos em domínios que não se parecem em nada: jurídico quebra bem por artigo, manual quebra por seção, e histórico de atendimento não quebra bem de jeito nenhum. Boa parte do trabalho é descobrir isso antes do cliente.",
+        stack: "langchain · vertex ai search · bigquery",
+    },
+    {
+        nome: "Kozato World",
+        periodo: "2019—",
+        texto: "Este site. Nasceu como homenagem à internet dos anos 2000, sobreviveu a umas quatro reformas e virou blog. Continua sendo um arquivo HTML servido por Flask, sem bundler e sem framework, porque em algum momento isso deixou de ser preguiça e virou opinião.",
+        stack: "flask · markdown · html",
+    },
+];
+
+function telaProjetos() {
+    return `
+        <section class="pagina">
+            <h1>Projetos</h1>
+            <p class="lede">O que eu construí e continuo mantendo. Parte é trabalho;
+               parte é desculpa pra mexer em servidor num domingo.</p>
+            ${PROJETOS.map(p => `
+                <article class="projeto">
+                    <div class="trilho">${esc(p.periodo)}</div>
+                    <div>
+                        <h2>${esc(p.nome)}</h2>
+                        <p>${esc(p.texto)}</p>
+                        <p class="stack">${esc(p.stack)}</p>
+                    </div>
+                </article>
+            `).join("")}
+        </section>
+    `;
+}
+
+// ---- roteamento ----
+
+function render() {
+    const caminho = location.pathname;
+    const post = caminho.match(/^\/posts\/(.+)$/);
+
+    if (post) palco.innerHTML = telaPost(decodeURIComponent(post[1]));
+    else if (caminho === "/sobre") palco.innerHTML = telaSobre();
+    else if (caminho === "/projetos") palco.innerHTML = telaProjetos();
+    else { palco.innerHTML = telaLista(); maquinaDeEscrever(); }
+
+    document.querySelectorAll(".topnav a").forEach(a => {
+        const alvo = a.getAttribute("href");
+        const ativo = alvo === "/" ? !post && caminho === "/" : caminho === alvo;
+        a.toggleAttribute("aria-current", ativo);
+        if (ativo) a.setAttribute("aria-current", "page");
+    });
+}
+
+function ir(caminho) {
+    if (caminho !== location.pathname) history.pushState({}, "", caminho);
+    render();
+    window.scrollTo(0, 0);
+}
+
+document.addEventListener("click", e => {
+    const link = e.target.closest("a[data-rota]");
+    if (link && !e.metaKey && !e.ctrlKey && !e.shiftKey && e.button === 0) {
+        e.preventDefault();
+        ir(link.getAttribute("href"));
+        return;
+    }
+
+    const chip = e.target.closest(".chip");
+    if (chip) {
+        categoriaAtiva = chip.dataset.cat;
+        render();
+        return;
+    }
+
+    if (e.target.closest("#sorte")) {
+        e.preventDefault();
+        window.open(ANEL[Math.floor(Math.random() * ANEL.length)].url,
+                    "_blank", "noopener");
+    }
+});
+
+window.addEventListener("popstate", render);
+
+fetch("/api/posts")
+    .then(r => r.json())
+    .then(d => {
+        posts = d.posts || [];
+        // só oferece filtro de categoria que tem post
+        const usadas = new Set(posts.map(p => p.category));
+        categorias = (d.categories || []).filter(c => usadas.has(c));
+        render();
+    })
+    .catch(() => {
+        palco.innerHTML = `<p class="vazio">Os posts não carregaram. Recarregue a página.</p>`;
+    });
+</script>
+
+</body>
+</html>

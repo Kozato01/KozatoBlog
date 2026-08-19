@@ -1,0 +1,5 @@
+# O currículo é quase todo ASCII e o Git o classifica como texto: sem esta
+# linha o autocrlf insere CRs no meio do PDF e o arquivo sai corrompido.
+*.pdf binary
+*.avif binary
+*.png binary

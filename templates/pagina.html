@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ titulo }}</title>
+  <style>
+    /* Layout único das três páginas — antes este bloco estava copiado em
+       cada arquivo HTML de pages/. */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f5f5f5;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .nav {
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+      font-size: 0.95em;
+    }
+    .nav a {
+      color: #007bff;
+      text-decoration: none;
+      margin-right: 20px;
+      white-space: nowrap;
+    }
+    .nav a:hover { text-decoration: underline; }
+    h1 {
+      color: #222;
+      margin-bottom: 10px;
+      font-size: 2.5em;
+    }
+    h2 {
+      color: #444;
+      font-size: 1.5em;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+    h3 {
+      color: #444;
+      font-size: 1.15em;
+      margin: 20px 0 10px;
+    }
+    p { margin-bottom: 15px; text-align: justify; }
+    ul { margin-left: 20px; margin-bottom: 15px; }
+    li { margin-bottom: 8px; }
+    code {
+      background: #f4f4f4;
+      border: 1px solid #e0e0e0;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 0.92em;
+    }
+
+    /* Caixas destacadas, aplicadas no markdown com {: .updated } e afins */
+    .updated {
+      color: #666;
+      font-size: 0.9em;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+    .intro { margin-bottom: 30px; color: #444; }
+    .contact {
+      background: #f9f9f9;
+      padding: 15px;
+      border-left: 4px solid #007bff;
+      margin: 20px 0;
+      text-align: left;
+    }
+    .warning {
+      background: #fff3cd;
+      padding: 15px;
+      border-left: 4px solid #ffc107;
+      margin: 20px 0;
+      border-radius: 4px;
+      text-align: left;
+    }
+    .step {
+      background: #f8f9fa;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 4px;
+      border-left: 4px solid #28a745;
+      text-align: left;
+    }
+
+    /* Patch notes: cada "## versão" vira o cabeçalho de um release */
+    .page-patch-notes h2 {
+      background: #f9f9f9;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 15px 20px;
+      font-size: 1.4em;
+      color: #222;
+      margin-top: 36px;
+    }
+    .page-patch-notes h3 { font-size: 1.05em; }
+    /* A etiqueta colorida é gerada pelo CSS: no markdown basta marcar o
+       título com {: .tag-new }, {: .tag-up } ou {: .tag-fix }. */
+    .page-patch-notes h3[class^="tag-"]::before {
+      display: inline-block;
+      font-size: 0.72em;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin-right: 6px;
+      color: #fff;
+    }
+    .page-patch-notes h3.tag-new::before { content: "Novo";     background: #28a745; }
+    .page-patch-notes h3.tag-fix::before { content: "Correção"; background: #dc3545; }
+    .page-patch-notes h3.tag-up::before  { content: "Melhoria"; background: #007bff; }
+  </style>
+</head>
+<body>
+  <div class="container page-{{ slug }}">
+    <nav class="nav">
+      <a href="/">Início</a>
+      <a href="/privacidade">Política de Privacidade</a>
+      <a href="/exclusao-conta">Exclusão de Conta</a>
+      <a href="/patch-notes">Patch Notes</a>
+    </nav>
+    {{ conteudo|safe }}
+  </div>
+</body>
+</html>
