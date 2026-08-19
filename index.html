@@ -821,7 +821,7 @@ const PROJETOS = [
     {
         nome: "Treino Up",
         periodo: "2026",
-        texto: "App de controle de treino. Nasceu de estudo de mobile mesmo: comecei no Android Studio apanhando de layout, migrei pro Ionic no meio do caminho, e o servidor é Python. Não tem IA nenhuma, e todo mundo pergunta se tem. É ficha de treino: série, repetição, carga e a data. Era isso que eu queria.",
+        texto: "App de controle de treino. Nasceu de estudo de mobile mesmo, comecei com uma pira maluca de querer aprender um pouco de android studio, comecei na real duvida Ionic ou Kotlin? es a questão, fui por Ionic pra na metade do caminho ver que precisava incluir coisas de Kotlin no app, o backend é em Python, O app é basicamente um aglobmerado de coisas essenciais que eu queria quando estava fazendo meus exercicios pra ficar igual ao Jones Manoel ---(Kozato, sem politicagem...), bom no app tem exercicios, cargas, metricas, corrida e gerenciamento dos treinos. Ficou parecendo um app pago... Mais informações sobre ele aqui: <a href='/sobre' data-rota>Treino-Up</a>",
         stack: "ionic · android studio · python · postgres",
     },
     {
@@ -829,12 +829,6 @@ const PROJETOS = [
         periodo: "2026",
         texto: "Debian, Docker e um túnel do Cloudflare numa máquina que mora na minha sala. Este site sai dali. Já caiu várias vezes e absolutamente todas foram culpa minha: puxei o cabo errado, mexi em config que estava funcionando, subi mudança sem ler o que eu tinha escrito. Provedor nunca teve culpa de nada. Fui eu, idiota demais kkkkkk.",
         stack: "debian · docker · gunicorn · cloudflare tunnel",
-    },
-    {
-        nome: "RAG multi-domínio",
-        periodo: "2023—",
-        texto: "Recuperação sobre bases de 1K a 10K documentos em domínios que não se parecem em nada: jurídico quebra bem por artigo, manual quebra por seção, e histórico de atendimento não quebra bem de jeito nenhum. Boa parte do trabalho é descobrir isso antes do cliente.",
-        stack: "langchain · vertex ai search · bigquery",
     },
     {
         nome: "Kozato World — Hello World",
@@ -849,13 +843,15 @@ function telaProjetos() {
         <section class="pagina">
             <h1>Projetos</h1>
             <p class="lede">O que eu construí e continuo mantendo. Parte é trabalho;
-               parte é desculpa pra mexer em servidor num domingo.</p>
+               parte é desculpa pra mexendo no fdm.<br>obs: depois vou atualizando mais...</p>
             ${PROJETOS.map(p => `
                 <article class="projeto">
                     <div class="trilho">${esc(p.periodo)}</div>
                     <div>
                         <h2>${esc(p.nome)}</h2>
-                        <p>${esc(p.texto)}</p>
+                        <!-- texto vai cru pra aceitar link e <br>; o conteudo e
+                             constante escrita aqui no arquivo, nao entra nada de fora -->
+                        <p>${p.texto}</p>
                         <p class="stack">${esc(p.stack)}</p>
                     </div>
                 </article>
